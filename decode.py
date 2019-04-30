@@ -1,36 +1,23 @@
 """
 Decode a wav file using a Goertzel filter.
-Logic for wav file reading inspired by Bart Massey's pdx-cs-sound project.
 """
 
 from goertzel import Goertzel
 import numpy as np
 import os
-import wave
+from scipy.io import wavfile
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(ROOT, 'data')
 
-filepath = os.path.join(DATA, "")
-wavfile = wave.open(filepath, 'rb')
+filepath = os.path.join(DATA, "schneider.wav")
 
-# Channels per frame.
-#channels = wavfile.getnchannels()
+# Read sample rate and data from audio file
+rate, data = wavfile.read(filepath)
 
-# Bytes per sample.
-#width = wavfile.getsampwidth()
+# set target frequency
+freq = 160
 
-# Sample rate
-rate = wavfile.getframerate()
-
-# Number of frames.
-num_frames = wavfile.getnframes()
-
-# Length of a frame
-#frame_width = width * channels
-
-# Get all samples
-samples = wavfile.readframes(num_frames)
-
-
-wavfile.close
+# create filter and get the output magnitude
+g_filter = Goertzel(rate, freq)
+magnitude = g_filter.filter(data)
