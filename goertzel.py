@@ -21,20 +21,18 @@ class Goertzel():
         :param sample_rate: samples per second
         """
 
-        # TODO: what's n ?????
-
         w0 = (2 * np.pi * self.target_freq) / self.sample_rate
-        self.normalize = np.exp(1j * w0 * n)
-        self.coeffs = np.array([(-1j) * w0 * k for k in range(n)])
+        self.normalize = np.exp(1j * w0 * sample_rate)
+        self.coeffs = np.array([(-1j) * w0 * k for k in range(sample_rate)])
 
     def filter(self, samples):
         """
         Goertzel filter equation
         :param samples: array of samples
+        :returns: amplitude
         """
 
-        # todo: what's x ???
-
-        sample_rate = 0
-        self.calculate_coeff(self.target_freq, sample_rate)
+        self.calculate_coeff(self.target_freq, self.sample_rate)
         y = np.abs(self.normalize * np.dot(self.coeffs, samples)
+
+        return y

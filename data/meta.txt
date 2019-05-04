@@ -1,0 +1,6 @@
+---------------------------------------------------
+--What each file should print when filter is run --
+---------------------------------------------------
+
+test1.wav: "Come here, Watson, I can hear you now"
+test2.wav: "What hath God wrought?"
