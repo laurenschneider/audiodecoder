@@ -1,1 +1,2 @@
-binascii
+numpy
+scipy

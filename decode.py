@@ -10,7 +10,7 @@ from scipy.io import wavfile
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(ROOT, 'data')
 
-filepath = os.path.join(DATA, "schneider.wav")
+filepath = os.path.join(DATA, "test1.wav")
 
 # Read sample rate and data from audio file
 rate, data = wavfile.read(filepath)
@@ -23,20 +23,33 @@ space_freq = 2025
 mark_filter = Goertzel(rate, mark_freq)
 space_filter = Goertzel(rate, space_freq)
 
+# calculate coefficients for each filter
+mark_filter.calculate_coeff()
+space_filter.calculate_coeff()
+
 bit_string = ''
 
 # for all samples in numpy array of data
 for i in range(0, data.size):
 
+# testing only
+#for i in range(500):
+
     # for each chunk of 160 samples
-    if i%160 == 0:
-        start = i - 159
-        end = i - 1
+    if i%160 == 0 and i != 0:
+        start = i - 160
+        end = i
         samples = data[start:end]
 
         # get amplitutes of sample set
         mark_amp = mark_filter.filter(samples)
         space_amp = space_filter.filter(samples)
+
+        # for testing
+        print("mark amp:")
+        print(mark_amp)
+        print("space amp:")
+        print(space_amp)
 
         if mark_amp > space_amp:
             # bit is 1
@@ -46,6 +59,9 @@ for i in range(0, data.size):
             to_add = '0'
         bit_string = bit_string + to_add
 
+# for testing
+print(bit_string)
+
 # total message
 message = ''
 
@@ -54,3 +70,5 @@ for x in range(0, len(bit_string)):
         start = x - 9
         end = x - 1
         message = message + chr(int(bit_string[start:end],2))
+
+print(message)

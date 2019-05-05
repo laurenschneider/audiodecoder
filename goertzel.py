@@ -17,13 +17,12 @@ class Goertzel():
         """
         Precompute coefficients needed for filter equation.
         Coeff formulas courtesy of Prof. Massey
-        :param f: target frequency
-        :param sample_rate: samples per second
         """
+        n = 160
 
         w0 = (2 * np.pi * self.target_freq) / self.sample_rate
-        self.normalize = np.exp(1j * w0 * sample_rate)
-        self.coeffs = np.array([(-1j) * w0 * k for k in range(sample_rate)])
+        self.normalize = np.exp(1j * w0 * n)
+        self.coeffs = np.array([np.exp((-1j) * w0 * k) for k in range(n)])
 
     def filter(self, samples):
         """
@@ -32,7 +31,8 @@ class Goertzel():
         :returns: amplitude
         """
 
-        self.calculate_coeff(self.target_freq, self.sample_rate)
-        y = np.abs(self.normalize * np.dot(self.coeffs, samples)
+        #self.calculate_coeff()
+        y = self.normalize * 160 * np.dot(self.coeffs, samples)
+        ampl = np.abs(y)
 
-        return y
+        return ampl
